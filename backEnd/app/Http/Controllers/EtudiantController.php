@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Etudiant;
+use App\Models\Module;
+use App\Models\Prof;
 
 class EtudiantController extends Controller
 {
@@ -29,8 +31,9 @@ class EtudiantController extends Controller
         $P=new Etudiant();
         $P->nom=$request->nom;
         $P->prenom=$request->prenom;
-        $P->note=$request->note;
-        $P->prof_id=$request->prof_id;
+        $P->email=$request->email;
+       // $P->note=$request->note;
+       // $P->prof_id=$request->prof_id;
         $P->save();
         return response()->json($P);
     }
@@ -47,6 +50,26 @@ class EtudiantController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getById($id)
+    {
+        $E=Etudiant::find($id);
+        $E->notes=$E->Note();
+if($E->notes!=null)
+    for ($i = 0; $i < count($E->notes); $i++) {
+        $E->notes[$i]->module =Module::find($E->notes[$i]->module_id);
+        $E->notes[$i]->module->prof=Prof::find($E->notes[$i]->module->prof_id);
+        // $note->module(); // Suppose que la méthode module() retourne le module associé à la note
+    }
+      //  $E->notes->Module=$E->notes->module();
+        return response()->json($E);
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -56,11 +79,13 @@ class EtudiantController extends Controller
     public function update(Request $request, $id)
     {
         
-        $P=new Etudiant();
+        $P=Etudiant::find($id);
+       // $P->id=$id;
         $P->nom=$request->nom;
         $P->prenom=$request->prenom;
-        $P->note=$request->note;
-        $P->prof_id=$request->prof_id;
+        $P->email=$request->email;
+        //$P->note=$request->note;
+        //$P->prof_id=$request->prof_id;
         $P->save();
         return response()->json($P);
     }

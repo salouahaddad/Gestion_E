@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ProfController;
 use App\Http\Controllers\EtudiantController;
+use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\NoteController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -23,3 +25,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::apiResource('profs',ProfController::class);
 Route::apiResource('etudiants',EtudiantController::class);
+Route::apiResource('Module',ModuleController::class);
+Route::get('etudiants/etudiantsbymodule/{id}', [EtudiantController::class, 'getById']);
+Route::apiResource('note',NoteController::class);

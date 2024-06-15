@@ -9,6 +9,10 @@
   <input type="text" class="form-control" id="prenom" v-model="etudiant.prenom"  placeholder="Prenom">
 </div>
 <div class="mb-3">
+  <input type="Email" class="form-control" id="email" v-model="etudiant.email"  placeholder="exomple@email.com">
+</div>
+<!--
+<div class="mb-3">
   <input type="number" class="form-control" id="note" v-model="etudiant.note" placeholder="Note">
 </div>
 <div class="mb-3">
@@ -18,6 +22,7 @@
 
 </select>
 </div>
+-->
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary"  @click="goback()" >Close</button>
@@ -42,8 +47,9 @@ export default {
                       id:"",
                       nom:"",
                       prenom:"",
-                      note:"",
-                      prof_id:""
+                      email:""
+                    //  note:"",
+                     // prof_id:""
                     }
     }}
     ,
@@ -53,20 +59,22 @@ mounted() {
 .then(data =>{console.log(data);
   this.etudiant=data;
 } );
+/**
 fetch("http://127.0.0.1:8000/api/profs")
 .then(res => res.json())
 .then(data =>{console.log(data);
   this.Profs=data;
-} )
+} ) */
 },
             methods: {
               goback:function () {
-                console.log(this.$router)
                 this.$router.push({path:"/"})
               },
 
                 modifier:function () { 
+                  this.etudiant.id=this.$route.params.id
                   console.log(JSON.stringify(this.etudiant));
+                  
                   fetch('http://127.0.0.1:8000/api/etudiants/'+this.$route.params.id, {
 method: 'PUT',
 headers: {
@@ -74,7 +82,7 @@ headers: {
 },
 body: JSON.stringify(this.etudiant)
 }).then(reponse => reponse.json())
-.then(etd => { 
+.then(() => { 
   this.$router.push({path:"/"})
 }
 ).catch(erreur => {
